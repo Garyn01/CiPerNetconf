@@ -1,5 +1,6 @@
 from ncclient import manager
 import pyautogui
+import ncBuilder
 # L2
 # inet
 # na switchu speed na interface
@@ -17,21 +18,6 @@ if __name__ == '__main__':
                                look_for_keys=False)
     pyautogui.alert(f"Connected to {host}!")
 
-    cmd_open = '''
-        <edit-config>
-            <target>
-                <candidate />
-            </target>
-            <default-operation>merge</default-operation>
-            <config>
-                <configuration>
-        '''
-    cmd_close = '''
-                </configuration>
-            </config>
-        </edit-config>
-    '''
-
     in_configuration = True
     while in_configuration:
         response = pyautogui.confirm("What do you want to change?\n"
@@ -41,7 +27,7 @@ if __name__ == '__main__':
             in_configuration = False
         elif response == 'Host name':
             hostname = pyautogui.prompt("Hostname: ")
-            cmd = cmd_open + "<system><host-name>" + hostname + "</host-name></system>" + cmd_close
+            cmd = ncBuilder.CMD_OPEN + "<system><host-name>" + hostname + "</host-name></system>" + ncBuilder.CMD_CLOSE
             print("Uploading configuration...")
             result = dev_srxl.rpc(cmd)
             print(result)
