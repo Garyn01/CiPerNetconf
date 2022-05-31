@@ -25,18 +25,28 @@ if __name__ == '__main__':
                                      buttons=['Host name', 'Interface', 'Commit'])
         if response == 'Commit':
             in_configuration = False
+            
         elif response == 'Host name':
             hostname = pyautogui.prompt("Hostname: ")
-            cmd = ncBuilder.CMD_OPEN + "<system><host-name>" + hostname + "</host-name></system>" + ncBuilder.CMD_CLOSE
-            print("Uploading configuration...")
+            cmd = ncBuilder.setHostnameCmd(hostname)
+            print("Uploading hostname configuration...")
             result = dev_srxl.rpc(cmd)
             print(result)
+
         elif response == 'Interface':
             if_name = pyautogui.prompt("Which interface do you want to configure\n(give name ex. ge-0/0/1)")
             option = pyautogui.confirm(buttons=['L2', 'L3', 'Disable'])
-            #TODO if l3 add unit (user input unit number) -> add to this unit inet address -> add unit to chosen interface
-            #TODO l3 = l2 + to co wyzej
-            #TODO dodac disable
+            if (option == 'L2'):
+                cmd = ncBuilder.l2InterfaceCmd(if_name)
+            elif (option == 'L3'):
+                vlanID = pyautogui.prompt("Give VlanID: ")
+                ipAddr = pyautogui.prompt("Give IP Address with mask (e.g. 192.168.1.3/24): ")
+                cmd = ncBuilder.l3InterfaceCmd(if_name, vlanID, ipAddr)
+            else:
+                cmd = ncBuilder.disableCmd(if_name)
+            print("Uploading interface configuration...")
+            result = dev_srxl.rpc(cmd)
+            print(result)
 
     print("Trying to commit...")
     result = dev_srxl.commit()
