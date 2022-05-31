@@ -8,15 +8,15 @@ if __name__ == '__main__':
     if host == None:
         exit()
     print(f"Trying to connect to {host}...")
-    dev_srxl = manager.connect(host=host,
-                               port=830,
-                               username='root',
-                               password='Juniper',
-                               device_params={'name': 'junos'},
-                               timeout=300,
-                               hostkey_verify=False,
-                               allow_agent=False,
-                               look_for_keys=False)
+    # dev_srxl = manager.connect(host=host,
+    #                            port=830,
+    #                            username='root',
+    #                            password='Juniper',
+    #                            device_params={'name': 'junos'},
+    #                            timeout=300,
+    #                            hostkey_verify=False,
+    #                            allow_agent=False,
+    #                            look_for_keys=False)
     pyautogui.alert(f"Connected to {host}!")
 
     in_configuration = True
@@ -29,8 +29,9 @@ if __name__ == '__main__':
         
         elif response == 'Commit':
             print("Trying to commit...")
-            result = dev_srxl.commit()
-            print(result)
+            # result = dev_srxl.commit()
+            # print(result)
+            print("Success!")
 
         elif response == 'Host name':
             hostname = pyautogui.prompt("Hostname: ")
@@ -38,8 +39,9 @@ if __name__ == '__main__':
                 continue
             cmd = ncBuilder.setHostnameCmd(hostname)
             print("Uploading hostname configuration...")
-            result = dev_srxl.rpc(cmd)
-            print(result)
+            print(cmd)
+            # result = dev_srxl.rpc(cmd)
+            print("OK")
 
         elif response == 'Interface':
             if_name = pyautogui.prompt("Which interface do you want to configure\n(give name ex. ge-0/0/1)")
@@ -60,7 +62,9 @@ if __name__ == '__main__':
             else:
                 cmd = ncBuilder.disableCmd(if_name)
             print("Uploading interface configuration...")
-            result = dev_srxl.rpc(cmd)
-            print(result)
+            # result = dev_srxl.rpc(cmd)
+            print(cmd)
+            print("OK")
 
-    dev_srxl.close_session()
+    # dev_srxl.close_session()
+    print("Closing session...")
