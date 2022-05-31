@@ -19,12 +19,13 @@ def setHostnameCmd(hostname: str) -> str:
                 <host-name>"{hostname}"</host-name>
             </system>"
             ''' + CMD_CLOSE
+
 #TODO check if <ethernet-auto/> is correct and add link to auto negotiate
-def l2InterfaceCmd (interfaceID: int, ) -> str:
+def l2InterfaceCmd (interfaceID: str) -> str:
     return CMD_OPEN + f'''
             <interfaces>
                 <interface>
-                    <name>ge-0/0/{interfaceID}</name>
+                    <name>{interfaceID}</name>
                     <ether-options>
                         <speed>
                             <ethernet-auto/>
@@ -40,13 +41,14 @@ def l2InterfaceCmd (interfaceID: int, ) -> str:
                 </interface>
             </interfaces>
             ''' + CMD_CLOSE
+
 #TODO check if <ethernet-auto/> is correct and add link to auto negotiate
 #TODO check if it's all for l3
-def l3InterfaceCmd (interfaceID: int, vlanUnit: int, ipAddr: str) -> str:
-    return f'''
+def l3InterfaceCmd (interfaceID: str, vlanUnit: int, ipAddr: str) -> str:
+    return CMD_OPEN + f'''
             <interfaces>
                 <interface>
-                    <name>ge-0/0/{interfaceID}</name>
+                    <name>{interfaceID}</name>
                     <ether-options>
                         <speed>
                             <ethernet-auto/>
@@ -73,4 +75,15 @@ def l3InterfaceCmd (interfaceID: int, vlanUnit: int, ipAddr: str) -> str:
                     </unit>
                 </interface>
             </interfaces>
-            '''
+            ''' + CMD_CLOSE
+
+#TODO add disable configuration
+def disableCmd(interfaceID: str) -> str: 
+    return CMD_OPEN + f'''
+            <interfaces>
+                <interface>
+                    <name>{interfaceID}</name>
+                    
+                </interface>
+            </interfaces>
+            ''' + CMD_CLOSE
