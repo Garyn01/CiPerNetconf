@@ -4,9 +4,9 @@ import pyautogui
 # inet
 # na switchu speed na interface
 if __name__ == '__main__':
-    host_ = pyautogui.prompt("IP address of Juniper device you want to configure:")
-    print(f"Trying to connect to {host_}...")
-    dev_srxl = manager.connect(host=host_,
+    host = pyautogui.prompt("IP address of Juniper device you want to configure:")
+    print(f"Trying to connect to {host}...")
+    dev_srxl = manager.connect(host=host,
                                port=830,
                                username='root',
                                password='Juniper',
@@ -15,7 +15,7 @@ if __name__ == '__main__':
                                hostkey_verify=False,
                                allow_agent=False,
                                look_for_keys=False)
-    pyautogui.alert(f"Connected to {host_}!")
+    pyautogui.alert(f"Connected to {host}!")
 
     cmd_open = '''
         <edit-config>
