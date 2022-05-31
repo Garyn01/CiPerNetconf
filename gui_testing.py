@@ -5,6 +5,8 @@ import ncBuilder
 
 if __name__ == '__main__':
     host = pyautogui.prompt("IP address of Juniper device you want to configure:")
+    if host == None:
+        exit()
     print(f"Trying to connect to {host}...")
     # dev_srxl = manager.connect(host=host,
     #                            port=830,
@@ -45,7 +47,7 @@ if __name__ == '__main__':
             if_name = pyautogui.prompt("Which interface do you want to configure\n(give name ex. ge-0/0/1)")
             if if_name == None: 
                 continue
-            
+
             option = pyautogui.confirm(buttons=['L2', 'L3', 'Disable'])
             if option == 'L2':
                 cmd = ncBuilder.l2InterfaceCmd(if_name)

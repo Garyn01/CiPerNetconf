@@ -5,6 +5,8 @@ import ncBuilder
 
 if __name__ == '__main__':
     host = pyautogui.prompt("IP address of Juniper device you want to configure:")
+    if host == None:
+        exit()
     print(f"Trying to connect to {host}...")
     dev_srxl = manager.connect(host=host,
                                port=830,
