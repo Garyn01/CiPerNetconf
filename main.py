@@ -42,25 +42,27 @@ if __name__ == '__main__':
             print(result)
 
         elif response == 'Interface':
-            if_name = pyautogui.prompt("Which interface do you want to configure\n(give name ex. ge-0/0/1)")
-            if if_name == None: 
-                continue
-
-            option = pyautogui.confirm(buttons=['L2', 'L3', 'Disable'])
-            if option == 'L2':
-                cmd = ncBuilder.l2InterfaceCmd(if_name)
-            elif option == 'L3':
-                vlanID = pyautogui.prompt("Give VlanID: ")
-                if vlanID == None: 
+            try:
+                if_name = pyautogui.prompt("Which interface do you want to configure\n(give name ex. ge-0/0/1)")
+                if if_name == None: 
                     continue
-                ipAddr = pyautogui.prompt("Give IP Address with mask (e.g. 192.168.1.3/24): ")
-                if ipAddr == None: 
-                    continue
-                cmd = ncBuilder.l3InterfaceCmd(if_name, vlanID, ipAddr)
-            else:
-                cmd = ncBuilder.disableCmd(if_name)
-            print("Uploading interface configuration...")
-            result = dev_srxl.rpc(cmd)
-            print(result)
 
+                option = pyautogui.confirm(buttons=['L2', 'L3', 'Enable', 'Disable'])
+                if option == 'L2':
+                    cmd = ncBuilder.l2InterfaceCmd(if_name)
+                elif option == 'L3':
+                    ipAddr = pyautogui.prompt("Give IP Address with mask (e.g. 192.168.1.3/24): ")
+                    if ipAddr == None: 
+                        continue
+                    cmd = ncBuilder.l3InterfaceCmd(if_name, ipAddr)
+                elif option == 'Enable':
+                    cmd = ncBuilder.enableCmd(if_name)
+                else:
+                    cmd = ncBuilder.disableCmd(if_name)
+                print("Uploading interface configuration...")
+                result = dev_srxl.rpc(cmd)
+                print(result)
+            except:
+                print("Already configured...")
+    print(f"Disconnecting from {host}...")
     dev_srxl.close_session()

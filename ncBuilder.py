@@ -15,20 +15,21 @@ CMD_CLOSE = '''
 
 def setHostnameCmd(hostname: str) -> str:
     return CMD_OPEN + f'''
-            "<system>
-                <host-name>"{hostname}"</host-name>
-            </system>"
+            <system>
+                <host-name>{hostname}</host-name>
+            </system>
             ''' + CMD_CLOSE
 
-#TODO check if <ethernet-auto/> is correct and add link to auto negotiate
 def l2InterfaceCmd (interfaceID: str) -> str:
     return CMD_OPEN + f'''
             <interfaces>
                 <interface>
                     <name>{interfaceID}</name>
                     <ether-options>
+                        <link-mode>automatic</link-mode>
                         <speed>
-                            <ethernet-auto/>
+                            <auto-negotiation>
+                            </auto-negotiation>
                         </speed>
                     </ether-options>
                     <unit>
@@ -36,54 +37,56 @@ def l2InterfaceCmd (interfaceID: str) -> str:
                         <family>
                             <ethernet-switching>
                             </ethernet-switching>
+                            <inet operation="delete"/>
                         </family>
                     </unit>
                 </interface>
             </interfaces>
             ''' + CMD_CLOSE
 
-#TODO check if <ethernet-auto/> is correct and add link to auto negotiate
-#TODO check if it's all for l3
-def l3InterfaceCmd (interfaceID: str, vlanUnit: int, ipAddr: str) -> str:
+def l3InterfaceCmd (interfaceID: str, ipAddr: str) -> str:
     return CMD_OPEN + f'''
             <interfaces>
                 <interface>
                     <name>{interfaceID}</name>
                     <ether-options>
+                        <link-mode>automatic</link-mode>
                         <speed>
-                            <ethernet-auto/>
+                            <auto-negotiation>
+                            </auto-negotiation>
                         </speed>
                     </ether-options>
                     <unit>
-                        <name>{vlanUnit}</name>
-                        <family>
-                            <ethernet-switching>
-                            </ethernet-switching>
-                        </family>
-                    </unit>
-                </interface>
-                <interface>
-                    <unit>
-                        <name>{vlanUnit}</name>
+                        <name>0</name>
                         <family>
                             <inet>
-                                <address>
-                                    <name>{ipAddr}</name>
-                                </address>
+                            <address>
+                                <name>{ipAddr}</name>
+                            </address>
                             </inet>
+                            <ethernet-switching operation="delete"/>
                         </family>
                     </unit>
                 </interface>
             </interfaces>
             ''' + CMD_CLOSE
 
-#TODO add disable configuration
 def disableCmd(interfaceID: str) -> str: 
     return CMD_OPEN + f'''
             <interfaces>
                 <interface>
                     <name>{interfaceID}</name>
-                    
+                    <disable/>
+                </interface>
+            </interfaces>
+            ''' + CMD_CLOSE
+
+def enableCmd(interfaceID: str) -> str: 
+    return CMD_OPEN + f'''
+            <interfaces>
+                <interface>
+                    <name>{interfaceID}</name>
+                    <disable operation="delete"/>
                 </interface>
             </interfaces>
             ''' + CMD_CLOSE
